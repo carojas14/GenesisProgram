@@ -183,7 +183,7 @@
 
 							<form action="" id="form" data-js-form >
 								<div class="mb-40">
-									<h3>Looking for</h3><br>
+									<h3 class="mb-10">Looking for</h3><br>
 									<select id="building-type" class="form-control">
 										<option id="select" value="select">---Select your building type---</option>
 										<option id="residential" value="residential">Residential</option>
@@ -253,25 +253,30 @@
 									<div class="row">
 										<div class="col-md-4">
 											<label for="num-bus">Number of companies</label>
-											<input required type="number" value="" class="form-control" min="0" id="num-bus">
+											<input required type="number" value="" class="form-control" min="0" data-js-input="companies">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-floors">Number of Floors</label>
-											<input required type="number" value="" class="form-control"min="0" id="num-floors">
+											<input required type="number" value="" class="form-control"min="0" data-js-input="floors">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-basements">Number of Basements</label>
-											<input type="number" value="" class="form-control" min="0" id="num-basements">
+											<input type="number" value="" class="form-control" min="0" data-js-input="basements">
+											<small style="color: red;"></small>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-4">
 											<label for="num-parking">Number of Parking Spots</label>
-											<input type="number" value="" class="form-control" min="0" id="num-parking">
+											<input type="number" value="" class="form-control" min="0" data-js-input="parking">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-occupants">Number of occupants per floor</label>
-											<input type="number" value="" class="form-control" min="0" id="num-occupants">
+											<input type="number" value="" class="form-control" min="0" data-js-input="occupants">
+											<small style="color: red;"></small>
 										</div>
 									</div>
 								</div>
@@ -281,29 +286,35 @@
 									<div class="row">
 										<div class="col-md-4">
 											<label for="num-bus">Number of businesses</label>
-											<input required type="number" value="" class="form-control" min="0" id="num-bus">
+											<input required type="number" value="" class="form-control" min="0" data-js-input="business">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-floors">Number of Floors</label>
-											<input required type="number" value="" class="form-control"min="0" id="num-floors">
+											<input required type="number" value="" class="form-control"min="0" data-js-input="floors">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-basements">Number of Basements</label>
-											<input type="number" value="" class="form-control" min="0" id="num-basements">
+											<input type="number" value="" class="form-control" min="0" data-js-input="basement">
+											<small style="color: red;"></small>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-4">
 											<label for="num-parking">Number of Parking Spots</label>
-											<input type="number" value="" class="form-control" min="0" id="num-parking">
+											<input type="number" value="" class="form-control" min="0" data-js-input="parking">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-occupants">Number of occupants per floor</label>
-											<input type="number" value="" class="form-control" min="0" id="num-occupants">
+											<input type="number" value="" class="form-control" min="0" data-js-input="occupants">
+											<small style="color: red;"></small>
 										</div>
 										<div class="col-md-4">
 											<label for="num-activity-hours">Number of hours of activity</label>
-											<input type="number" value="" class="form-control" min="0" max="24" id="num-activity-hours">
+											<input type="number" value="" class="form-control" min="0" max="24" data-js-input="activityHours">
+											<small style="color: red;"></small>
 										</div>
 									</div>
 								</div>
@@ -314,18 +325,35 @@
 								</div>
 
 								<div class="mb-30">
-									<h3>Product Line</h3><br>
+									<h3 class="mb-10">Product Line</h3><br>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" name="product-line" id="standard">
+										<input class="form-check-input" type="radio" name="product-line" value="standard" data-js-input="radio">
 										<label class="form-check-label" for="stantard">Stantard</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" name="product-line" id="premium">
+										<input class="form-check-input" type="radio" name="product-line" value="premium" data-js-input="radio">
 										<label class="form-check-label" for="premium">Premium</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" name="product-line" id="excelium">
+										<input class="form-check-input" type="radio" name="product-line" value="excelium" data-js-input="radio">
 										<label class="form-check-label" for="excelium">Excelium</label>
+									</div>
+								</div>
+
+								<div class="mb-30" data-js-type="price" style="display: none;">
+									<div class="row">
+										<div class="col-md-4">
+											<label for="num-bus">Elevator Cost $</label>
+											<input required type="text" id="serviceValue" class="form-control" min="0" disabled>
+										</div>
+										<div class="col-md-4">
+											<label for="num-floors">Installation fees $</label>
+											<input required type="text" id="installation" class="form-control"min="0" disabled>
+										</div>
+										<div class="col-md-4">
+											<label for="num-basements">Total price $</label>
+											<input type="text" id="totalCost" class="form-control" min="0" disabled>
+										</div>
 									</div>
 								</div>
 

@@ -1,6 +1,6 @@
 (() => {
 
-    window.addEventListener('DOMContentLoaded', (e) => {
+    window.addEventListener('DOMContentLoaded', () => {
 
         let form = document.querySelector('[data-js-form]'),
             building = document.getElementById('building-type'),
@@ -12,17 +12,20 @@
             inputCommercial = divCommercial.querySelectorAll('[data-js-input]'),
             inputCorporate = divCorporate.querySelectorAll('[data-js-input]'),
             inputHybrid = divHybrid.querySelectorAll('[data-js-input]'),
+            productLine = document.querySelectorAll('[data-js-input="radio"]'),
             elevatorsNeed = document.getElementById('elavators-need'),
+            price = document.querySelector('[data-js-type="price"]'),
             inputElevatorsNeed = elevatorsNeed.querySelector('input');
 
+            //console.log(price)
 
         /**
          * validation select and show input for each type of building
+         * code find https://stackoverflow.com/questions/24875414/addeventlistener-change-and-option-selection
          */
 
-        // code find https://stackoverflow.com/questions/24875414/addeventlistener-change-and-option-selection
-        building.addEventListener('click', (e) => {
-            e.preventDefault();
+        building.addEventListener('click', () => {
+
 
             building.addEventListener('change', () => {
 
@@ -33,6 +36,7 @@
                         divCorporate.style.display = "none";
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "none";
+                        inputElevatorsNeed.value = '';
                     break;
                     case "residential":
                         divResidential.style.display = "block";
@@ -40,6 +44,23 @@
                         divCorporate.style.display = "none";
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
+                        inputElevatorsNeed.value = '';
+                        for (let i = 0, l = inputResidential.length; i < l; i++) {
+
+                            inputResidential[i].addEventListener("change", estimateNumElevatorResidential);
+                        }
+                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
+
+                            inputCommercial[i].value = '';
+                        }
+                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
+
+                            inputCorporate[i].value = '';
+                        }
+                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
+
+                            inputHybrid[i].value = '';
+                        }
                     break;
                     case "commercial":
                         divResidential.style.display = "none";
@@ -47,6 +68,23 @@
                         divCorporate.style.display = "none";
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
+                        inputElevatorsNeed.value = '';
+                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
+
+                            inputCommercial[i].addEventListener("change", estimateNumElevatorCommercial);
+                        }
+                        for (let i = 0, l = inputResidential.length; i < l; i++) {
+
+                            inputResidential[i].value = '';
+                        }
+                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
+
+                            inputCorporate[i].value = '';
+                        }
+                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
+
+                            inputHybrid[i].value = '';
+                        }
                     break;
                     case "corporate":
                         divResidential.style.display = "none";
@@ -54,6 +92,23 @@
                         divCorporate.style.display = "block";
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
+                        inputElevatorsNeed.value = '';
+                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
+
+                            inputCorporate[i].addEventListener("change", estimateNumElevatorCorp);
+                        }
+                        for (let i = 0, l = inputResidential.length; i < l; i++) {
+
+                            inputResidential[i].value = '';
+                        }
+                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
+
+                            inputCommercial[i].value = '';
+                        }
+                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
+
+                            inputHybrid[i].value = '';
+                        }
                     break;
                     case "hybrid":
                         divResidential.style.display = "none";
@@ -61,62 +116,57 @@
                         divCorporate.style.display = "none";
                         divHybrid.style.display = "block";
                         elevatorsNeed.style.display = "block";
+                        inputElevatorsNeed.value = '';
+                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
+
+                            inputHybrid[i].addEventListener("change", estimateNumElevatorHybrid);
+                        }
+                        for (let i = 0, l = inputResidential.length; i < l; i++) {
+
+                            inputResidential[i].value = '';
+                        }
+                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
+
+                            inputCommercial[i].value = '';
+                        }
+                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
+
+                            inputCorporate[i].value = '';
+                        }
                     break;
                 }
             });
-        });
+        }, {passive:false});
 
         /**
          * Calculation for estimate the number of lift cages for Residential building
          */
 
-        for (let i = 0, l = inputResidential.length; i < l; i++) {
-
-            inputResidential[i].addEventListener("change", estimateNumElevatorResidential);
-        }
 
         function estimateNumElevatorResidential() {
 
-            let numResidentialElevators = 0;
+            if(isValid(inputResidential)){
 
-            for (let i = 0, l = inputResidential.length; i < l; i++) {
-
-                let values = inputResidential[i].value,
-                    msgError = inputResidential[i].nextElementSibling;
+                for (let i = 0, l = inputResidential.length; i < l; i++) {
 
 
-                if (inputResidential[i].type == 'number') {
-                    if (values != '') {
-                        let values = inputResidential[i].value,
-                        numValue = parseInt(values);
+                    let numApt = inputResidential[0].value
+                    numFloors = inputResidential[1].value,
+                    numBasements = inputResidential[2].value;
 
-                        if (numValue < 0) {
-                            msgError.innerHTML = 'Must be positive number';
-                        } else {
-                            if (values.length > 1 && values.charAt(0) == 0) {
-                                msgError.innerHTML = 'First character can not be 0';
-                            } else {
-                                msgError.innerHTML = '';
-                            }
-                        }
-                        let numApt = inputResidential[0].value
-                        numFloors = inputResidential[1].value,
-                        numBasements = inputResidential[2].value;
+                    let estimate = Math.ceil(numApt / (numFloors * 6));
 
-                        let estimate = Math.ceil(numApt / (numFloors * 6));
+                    let columns = Math.ceil(numFloors / 20);
 
-                        let columns = Math.ceil(numFloors / 20);
+                    let numResidentialElevators = estimate * columns;
 
-                        let numResidentialElevators = estimate * columns;
-
-                        inputElevatorsNeed.value = numResidentialElevators;
-                    } else {
-                        inputElevatorsNeed.value = 0;
-                    }
+                    inputElevatorsNeed.value = numResidentialElevators;
                 }
+            } else {
+                inputElevatorsNeed.value = 0;
+
             }
 
-            return numResidentialElevators;
         }
 
 
@@ -124,50 +174,26 @@
          * Calculation for estimate the number of lift cages for Commercial building
          */
 
-         for (let i = 0, l = inputCommercial.length; i < l; i++) {
-
-            inputCommercial[i].addEventListener("click", estimateNumElevatorCommercial);
-        }
-
 
         function estimateNumElevatorCommercial() {
 
             let numCommercialElevators = 0;
 
+            if(isValid(inputCommercial)){
+                for (let i = 0, l = inputCommercial.length; i < l; i++) {
 
-            for (let i = 0, l = inputCommercial.length; i < l; i++) {
+                    let numBus = inputCommercial[0].value
+                        numFloors = inputCommercial[1].value,
+                        numBasement = inputCommercial[2].value;
+                        numParking = inputCommercial[3].value;
+                        numElevators = inputCommercial[4].value;
 
-                let values = inputCommercial[i].value,
-                    msgError = inputCommercial[i].nextElementSibling;
-
-
-                if (inputCommercial[i].type == 'number') {
-                    if (values != '') {
-                        let values = inputCommercial[i].value,
-                        numValue = parseInt(values);
-
-                        if (numValue < 0) {
-                            msgError.innerHTML = 'Must be positive number';
-                        } else {
-                            if (values.length > 1 && values.charAt(0) == 0) {
-                                msgError.innerHTML = 'First character can not be 0';
-                            } else {
-                                msgError.innerHTML = '';
-                            }
-                        }
-                        let numBus = inputCommercial[0].value
-                            numFloors = inputCommercial[1].value,
-                            numBasement = inputCommercial[2].value;
-                            numParking = inputCommercial[3].value;
-                            numElevators = inputCommercial[4].value;
-
-                        inputElevatorsNeed.value = numElevators;
-                        numCommercialElevators = numElevators;
-                    } else {
-                        //msgError.innerHTML = 'Required';
-                        inputElevatorsNeed.value = 0;
-                    }
+                    inputElevatorsNeed.value = numElevators;
+                    numCommercialElevators = numElevators;
                 }
+            } else {
+                //msgError.innerHTML = 'Required';
+                inputElevatorsNeed.value = 0;
             }
 
             return numCommercialElevators;
@@ -178,60 +204,136 @@
          * Calculation for estimate the number of lift cages for Corporative building
          */
 
-        for (let i = 0, l = inputCorporate.length; i < l; i++) {
 
-            inputCorporate[i].addEventListener("change", estimateNumElevatorCorpOrHyb);
+        function estimateNumElevatorCorp() {
+
+            if(isValid(inputCorporate)){
+                estimateNumElevatorCorpOrHyb(inputCorporate);
+            }
         }
 
 
-        function estimateNumElevatorCorpOrHyb() {
-
-            let numCorpElevators = 0;
-            console.log (inputCorporate[i]);
-
-
-            for (let i = 0, l = inputCommercial.length; i < l; i++) {
-
-                let values = inputCommercial[i].value,
-                    msgError = inputCommercial[i].nextElementSibling;
+        /**
+         * Calculation for estimate the number of lift cages for Hybrid building
+         */
 
 
-                if (inputCommercial[i].type == 'number') {
+        function estimateNumElevatorHybrid() {
+
+            if(isValid(inputHybrid)){
+                estimateNumElevatorCorpOrHyb(inputHybrid);
+            }
+        }
+
+
+
+        function estimateNumElevatorCorpOrHyb(input) {
+
+
+            let numCorpOrHybElevators = 0;
+
+            //if(isValid(inputCorporate)){
+                for (let i = 0, l = input.length; i < l; i++) {
+
+                    //console.log(input[0].value)
+
+                    let numComp = input[0].value
+                        numFloors = parseInt(input[1].value),
+                        numBasement = parseInt(input[2].value);
+                        numParking = input[3].value;
+                        numOccupants = parseInt(input[4].value);
+
+                    let totalOccupants = numOccupants*(numFloors + numBasement);
+
+                    let elevatorReq = Math.ceil(totalOccupants/1000);
+
+                    let columns = Math.ceil((numFloors + numBasement) / 20);
+
+                    let elevatorByColumns = Math.ceil(elevatorReq / columns);
+
+                    let totalElevators = Math.ceil(elevatorByColumns * columns);
+
+                    inputElevatorsNeed.value = totalElevators;
+                    numCorpOrHybElevators = totalElevators;
+                }
+            //} else {
+                //msgError.innerHTML = 'Required';
+                //inputElevatorsNeed.value = 0;
+            //}
+
+            return numCorpOrHybElevators;
+        }
+
+
+        /**
+         * Inputs validation
+         */
+        isValid = (inputs) => {
+            let isValid = true;
+
+            for (let i = 0, l = inputs.length; i < l; i++) {
+
+                let values = inputs[i].value,
+                    msgError = inputs[i].nextElementSibling;
+
+
+                if (inputs[i].type == 'number') {
                     if (values != '') {
-                        let values = inputCommercial[i].value,
+                        let values = inputs[i].value,
                         numValue = parseInt(values);
 
                         if (numValue < 0) {
                             msgError.innerHTML = 'Must be positive number';
+                            isValid = false;
                         } else {
                             if (values.length > 1 && values.charAt(0) == 0) {
                                 msgError.innerHTML = 'First character can not be 0';
+                                isValid = false;
                             } else {
                                 msgError.innerHTML = '';
                             }
                         }
-                        let numBus = inputCommercial[0].value
-                            numFloors = inputCommercial[1].value,
-                            numBasement = inputCommercial[2].value;
-                            numParking = inputCommercial[3].value;
-                            numElevators = inputCommercial[4].value;
-
-                        inputElevatorsNeed.value = numElevators;
-                        numCommercialElevators = numElevators;
-                    } else {
-                        //msgError.innerHTML = 'Required';
-                        inputElevatorsNeed.value = 0;
                     }
                 }
             }
-
-            return numCommercialElevators;
-
+            return isValid;
         }
 
 
 
+        productLine.forEach(product => product.addEventListener('change', line = (e) => {
+            
+
+            let elevatorCost = document.querySelector('#serviceValue');
+            let installation = document.querySelector('#installation');
+            let totalCost = document.querySelector('#totalCost');
+            let resElevators = elevatorsNeed.querySelector('input').value;
+            //console.log(resElevators)
 
 
-    });
+                switch (product.value) {
+                    case "standard":
+                        price.style.display = "block";
+                        elevatorCost.value = (7565*resElevators).toFixed(2);
+                        installation.value = (7565*0.10*resElevators).toFixed(2);
+                        totalCost.value = (7565*1.10*resElevators).toFixed(2)
+                    break;
+                    case "premium":
+                        price.style.display = "block";
+                        elevatorCost.value = (12345*resElevators).toFixed(2);
+                        installation.value = (12345*0.13*resElevators).toFixed(2);
+                        totalCost.value = (12345*1.13*resElevators).toFixed(2)
+
+                    break;
+                    case "excelium":
+                        price.style.display = "block";
+                        elevatorCost.value = (15400*resElevators).toFixed(2);
+                        installation.value = (12345*0.16*resElevators).toFixed(2);
+                        totalCost.value = (12345*1.16*resElevators).toFixed(2)
+                    break;
+
+                }
+
+        }, {passive:false}));
+    }, {passive:false});
 })();

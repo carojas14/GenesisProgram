@@ -1,8 +1,11 @@
 (() => {
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', (e) => {
 
         let form = document.querySelector('[data-js-form]'),
+            inputForm = document.querySelectorAll('input');
+            wrapper = document.querySelector('[data-js-wrapper]');
+            inputWrapper = document.querySelectorAll('[data-js-input]');
             building = document.getElementById('building-type'),
             divResidential = document.querySelector('[data-js-type="residential"]'),
             divCommercial = document.querySelector('[data-js-type="commercial"]'),
@@ -17,8 +20,6 @@
             price = document.querySelector('[data-js-type="price"]'),
             inputElevatorsNeed = elevatorsNeed.querySelector('input');
 
-            //console.log(price)
-
         /**
          * validation select and show input for each type of building
          * code find https://stackoverflow.com/questions/24875414/addeventlistener-change-and-option-selection
@@ -26,8 +27,8 @@
 
         building.addEventListener('click', () => {
 
-
             building.addEventListener('change', () => {
+                form.reset('input');
 
                 switch (building.value) {
                     case "select":
@@ -45,22 +46,12 @@
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
                         inputElevatorsNeed.value = '';
+
                         for (let i = 0, l = inputResidential.length; i < l; i++) {
 
                             inputResidential[i].addEventListener("change", estimateNumElevatorResidential);
                         }
-                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
 
-                            inputCommercial[i].value = '';
-                        }
-                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
-
-                            inputCorporate[i].value = '';
-                        }
-                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
-
-                            inputHybrid[i].value = '';
-                        }
                     break;
                     case "commercial":
                         divResidential.style.display = "none";
@@ -69,21 +60,16 @@
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
                         inputElevatorsNeed.value = '';
+
+                        /* for (let i = 0, l = inputForm.length; i < l; i++) {
+
+                            inputForm[i].value = '';
+                            inputForm[i].checked = false;
+                        } */
+
                         for (let i = 0, l = inputCommercial.length; i < l; i++) {
 
                             inputCommercial[i].addEventListener("change", estimateNumElevatorCommercial);
-                        }
-                        for (let i = 0, l = inputResidential.length; i < l; i++) {
-
-                            inputResidential[i].value = '';
-                        }
-                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
-
-                            inputCorporate[i].value = '';
-                        }
-                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
-
-                            inputHybrid[i].value = '';
                         }
                     break;
                     case "corporate":
@@ -93,21 +79,10 @@
                         divHybrid.style.display = "none";
                         elevatorsNeed.style.display = "block";
                         inputElevatorsNeed.value = '';
+
                         for (let i = 0, l = inputCorporate.length; i < l; i++) {
 
                             inputCorporate[i].addEventListener("change", estimateNumElevatorCorp);
-                        }
-                        for (let i = 0, l = inputResidential.length; i < l; i++) {
-
-                            inputResidential[i].value = '';
-                        }
-                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
-
-                            inputCommercial[i].value = '';
-                        }
-                        for (let i = 0, l = inputHybrid.length; i < l; i++) {
-
-                            inputHybrid[i].value = '';
                         }
                     break;
                     case "hybrid":
@@ -117,26 +92,15 @@
                         divHybrid.style.display = "block";
                         elevatorsNeed.style.display = "block";
                         inputElevatorsNeed.value = '';
+
                         for (let i = 0, l = inputHybrid.length; i < l; i++) {
 
                             inputHybrid[i].addEventListener("change", estimateNumElevatorHybrid);
                         }
-                        for (let i = 0, l = inputResidential.length; i < l; i++) {
-
-                            inputResidential[i].value = '';
-                        }
-                        for (let i = 0, l = inputCommercial.length; i < l; i++) {
-
-                            inputCommercial[i].value = '';
-                        }
-                        for (let i = 0, l = inputCorporate.length; i < l; i++) {
-
-                            inputCorporate[i].value = '';
-                        }
                     break;
                 }
             });
-        }, {passive:false});
+        });
 
         /**
          * Calculation for estimate the number of lift cages for Residential building
@@ -237,8 +201,7 @@
 
                     //console.log(input[0].value)
 
-                    let numComp = input[0].value
-                        numFloors = parseInt(input[1].value),
+                    let numFloors = parseInt(input[1].value),
                         numBasement = parseInt(input[2].value);
                         numParking = input[3].value;
                         numOccupants = parseInt(input[4].value);
@@ -302,7 +265,6 @@
 
 
         productLine.forEach(product => product.addEventListener('change', line = (e) => {
-            
 
             let elevatorCost = document.querySelector('#serviceValue');
             let installation = document.querySelector('#installation');
@@ -323,7 +285,6 @@
                         elevatorCost.value = (12345*resElevators).toFixed(2);
                         installation.value = (12345*0.13*resElevators).toFixed(2);
                         totalCost.value = (12345*1.13*resElevators).toFixed(2)
-
                     break;
                     case "excelium":
                         price.style.display = "block";
@@ -334,6 +295,6 @@
 
                 }
 
-        }, {passive:false}));
-    }, {passive:false});
+        }));
+    });
 })();

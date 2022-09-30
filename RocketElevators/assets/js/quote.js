@@ -3,9 +3,6 @@
     window.addEventListener('DOMContentLoaded', (e) => {
 
         let form = document.querySelector('[data-js-form]'),
-            inputForm = document.querySelectorAll('input');
-            wrapper = document.querySelector('[data-js-wrapper]');
-            inputWrapper = document.querySelectorAll('[data-js-input]');
             building = document.getElementById('building-type'),
             divResidential = document.querySelector('[data-js-type="residential"]'),
             divCommercial = document.querySelector('[data-js-type="commercial"]'),
@@ -18,7 +15,19 @@
             productLine = document.querySelectorAll('[data-js-input="radio"]'),
             elevatorsNeed = document.getElementById('elavators-need'),
             price = document.querySelector('[data-js-type="price"]'),
-            inputElevatorsNeed = elevatorsNeed.querySelector('input');
+            inputElevatorsNeed = elevatorsNeed.querySelector('input'),
+            priceElevator = document.getElementById('priceElevator'),
+            elevatorCost = document.getElementById('serviceValue'),
+            installation = document.getElementById('installation'),
+            totalCost = document.getElementById('totalCost');
+
+            let selected;
+            for (const product of productLine) {
+                if (product.checked) {
+                    selected = product.value;
+                    break;
+                }
+            }
 
         /**
          * validation select and show input for each type of building
@@ -49,7 +58,8 @@
 
                         for (let i = 0, l = inputResidential.length; i < l; i++) {
 
-                            inputResidential[i].addEventListener("change", estimateNumElevatorResidential);
+                            inputResidential[i].addEventListener("input", estimateNumElevatorResidential);
+
                         }
 
                     break;
@@ -61,15 +71,9 @@
                         elevatorsNeed.style.display = "block";
                         inputElevatorsNeed.value = '';
 
-                        /* for (let i = 0, l = inputForm.length; i < l; i++) {
-
-                            inputForm[i].value = '';
-                            inputForm[i].checked = false;
-                        } */
-
                         for (let i = 0, l = inputCommercial.length; i < l; i++) {
 
-                            inputCommercial[i].addEventListener("change", estimateNumElevatorCommercial);
+                            inputCommercial[i].addEventListener("input", estimateNumElevatorCommercial);
                         }
                     break;
                     case "corporate":
@@ -82,7 +86,7 @@
 
                         for (let i = 0, l = inputCorporate.length; i < l; i++) {
 
-                            inputCorporate[i].addEventListener("change", estimateNumElevatorCorp);
+                            inputCorporate[i].addEventListener("input", estimateNumElevatorCorp);
                         }
                     break;
                     case "hybrid":
@@ -95,7 +99,7 @@
 
                         for (let i = 0, l = inputHybrid.length; i < l; i++) {
 
-                            inputHybrid[i].addEventListener("change", estimateNumElevatorHybrid);
+                            inputHybrid[i].addEventListener("input", estimateNumElevatorHybrid);
                         }
                     break;
                 }
@@ -114,9 +118,8 @@
                 for (let i = 0, l = inputResidential.length; i < l; i++) {
 
 
-                    let numApt = inputResidential[0].value
-                    numFloors = inputResidential[1].value,
-                    numBasements = inputResidential[2].value;
+                    let numApt = inputResidential[0].value,
+                    numFloors = inputResidential[1].value;
 
                     let estimate = Math.ceil(numApt / (numFloors * 6));
 
@@ -124,7 +127,8 @@
 
                     let numResidentialElevators = estimate * columns;
 
-                    inputElevatorsNeed.value = numResidentialElevators;
+                    inputElevatorsNeed.value = numResidentialElevators || 0;
+
                 }
             } else {
                 inputElevatorsNeed.value = 0;
@@ -146,13 +150,9 @@
             if(isValid(inputCommercial)){
                 for (let i = 0, l = inputCommercial.length; i < l; i++) {
 
-                    let numBus = inputCommercial[0].value
-                        numFloors = inputCommercial[1].value,
-                        numBasement = inputCommercial[2].value;
-                        numParking = inputCommercial[3].value;
-                        numElevators = inputCommercial[4].value;
+                    let numElevators = inputCommercial[4].value;
 
-                    inputElevatorsNeed.value = numElevators;
+                    inputElevatorsNeed.value = numElevators || 0;
                     numCommercialElevators = numElevators;
                 }
             } else {
@@ -196,7 +196,6 @@
 
             let numCorpOrHybElevators = 0;
 
-            //if(isValid(inputCorporate)){
                 for (let i = 0, l = input.length; i < l; i++) {
 
                     //console.log(input[0].value)
@@ -219,10 +218,6 @@
                     inputElevatorsNeed.value = totalElevators;
                     numCorpOrHybElevators = totalElevators;
                 }
-            //} else {
-                //msgError.innerHTML = 'Required';
-                //inputElevatorsNeed.value = 0;
-            //}
 
             return numCorpOrHybElevators;
         }
@@ -247,10 +242,20 @@
 
                         if (numValue < 0) {
                             msgError.innerHTML = 'Must be positive number';
+                            inputElevatorsNeed.value = 0;
+                            priceElevator.value = 0;
+                            elevatorCost.value = 0;
+                            installation.value = 0;
+                            totalCost.value = 0;
                             isValid = false;
                         } else {
                             if (values.length > 1 && values.charAt(0) == 0) {
                                 msgError.innerHTML = 'First character can not be 0';
+                                inputElevatorsNeed.value = 0;
+                                priceElevator.value = 0;
+                                elevatorCost.value = 0;
+                                installation.value = 0;
+                                totalCost.value = 0;
                                 isValid = false;
                             } else {
                                 msgError.innerHTML = '';
@@ -264,37 +269,49 @@
 
 
 
-        productLine.forEach(product => product.addEventListener('change', line = (e) => {
+         /**
+         * Calculation for price according to product line
+         */
 
-            let elevatorCost = document.querySelector('#serviceValue');
-            let installation = document.querySelector('#installation');
-            let totalCost = document.querySelector('#totalCost');
-            let resElevators = elevatorsNeed.querySelector('input').value;
-            //console.log(resElevators)
+        for(const product of productLine){
+
+            product.addEventListener('change', showProduct);
+        }
 
 
-                switch (product.value) {
-                    case "standard":
-                        price.style.display = "block";
-                        elevatorCost.value = (7565*resElevators).toFixed(2);
-                        installation.value = (7565*0.10*resElevators).toFixed(2);
-                        totalCost.value = (7565*1.10*resElevators).toFixed(2)
-                    break;
-                    case "premium":
-                        price.style.display = "block";
-                        elevatorCost.value = (12345*resElevators).toFixed(2);
-                        installation.value = (12345*0.13*resElevators).toFixed(2);
-                        totalCost.value = (12345*1.13*resElevators).toFixed(2)
-                    break;
-                    case "excelium":
-                        price.style.display = "block";
-                        elevatorCost.value = (15400*resElevators).toFixed(2);
-                        installation.value = (12345*0.16*resElevators).toFixed(2);
-                        totalCost.value = (12345*1.16*resElevators).toFixed(2)
-                    break;
+        function showProduct() {
 
-                }
 
-        }));
+            if (this.checked) {
+                //console.log(this.value)
+
+                let resElevators = elevatorsNeed.querySelector('input').value;
+
+            switch (this.value) {
+                case "standard":
+                    price.style.display = "block";
+                    priceElevator.value = (7565*1).toFixed(2);
+                    elevatorCost.value = (7565*resElevators).toFixed(2);
+                    installation.value = (7565*0.10*resElevators).toFixed(2);
+                    totalCost.value = (7565*1.10*resElevators).toFixed(2);
+                break;
+                case "premium":
+                    price.style.display = "block";
+                    priceElevator.value = (12345*1).toFixed(2);
+                    elevatorCost.value = (12345*resElevators).toFixed(2);
+                    installation.value = (12345*0.13*resElevators).toFixed(2);
+                    totalCost.value = (12345*1.13*resElevators).toFixed(2);
+                break;
+                case "excelium":
+                    price.style.display = "block";
+                    priceElevator.value = (15400*1).toFixed(2);
+                    elevatorCost.value = (15400*resElevators).toFixed(2);
+                    installation.value = (12345*0.16*resElevators).toFixed(2);
+                    totalCost.value = (12345*1.16*resElevators).toFixed(2);
+                break;
+            }
+            }
+        }
+
     });
 })();

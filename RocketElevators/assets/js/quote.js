@@ -21,13 +21,6 @@
             installation = document.getElementById('installation'),
             totalCost = document.getElementById('totalCost');
 
-            let selected;
-            for (const product of productLine) {
-                if (product.checked) {
-                    selected = product.value;
-                    break;
-                }
-            }
 
         /**
          * validation select and show input for each type of building

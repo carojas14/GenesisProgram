@@ -283,21 +283,21 @@
             switch (this.value) {
                 case "standard":
                     price.style.display = "block";
-                    priceElevator.value = (7565*1).toFixed(2);
+                    priceElevator.value = "7565.00";
                     elevatorCost.value = (7565*resElevators).toFixed(2);
                     installation.value = (7565*0.10*resElevators).toFixed(2);
                     totalCost.value = (7565*1.10*resElevators).toFixed(2);
                 break;
                 case "premium":
                     price.style.display = "block";
-                    priceElevator.value = (12345*1).toFixed(2);
+                    priceElevator.value = "12345.00";
                     elevatorCost.value = (12345*resElevators).toFixed(2);
                     installation.value = (12345*0.13*resElevators).toFixed(2);
                     totalCost.value = (12345*1.13*resElevators).toFixed(2);
                 break;
                 case "excelium":
                     price.style.display = "block";
-                    priceElevator.value = (15400*1).toFixed(2);
+                    priceElevator.value = "15400.00";
                     elevatorCost.value = (15400*resElevators).toFixed(2);
                     installation.value = (12345*0.16*resElevators).toFixed(2);
                     totalCost.value = (12345*1.16*resElevators).toFixed(2);
